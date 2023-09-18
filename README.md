@@ -1,4 +1,4 @@
-# WOW.DI (WIP)
+# WOW.DI
 
 WOW.DI is a unity package/library for Dependency Injection.　It is inspired by Vue.js.
 
