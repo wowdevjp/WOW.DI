@@ -119,6 +119,12 @@ public class WeatherForecast : MonoBehaviour
 }
 ```
 
+## Referenced Projects
+
+- [Zenject](https://github.com/modesttree/Zenject)
+- [VContainer](https://github.com/hadashiA/VContainer)
+- [Microsoft.Extension.DependencyInjection](https://github.com/dotnet/runtime)
+
 ## License
 
 The license is MIT license.
