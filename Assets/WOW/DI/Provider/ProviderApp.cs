@@ -13,7 +13,7 @@ namespace WOW.DI
         [SerializeField]
         private ProviderAppInstallerBase[] installers = new ProviderAppInstallerBase[0];
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void CreateInstance()
         {
             if(instance != null)
@@ -95,7 +95,7 @@ namespace WOW.DI
                     continue;
                 }
 
-                Injection.InjectToFields(monoBehaviour.GetType(), monoBehaviour);
+                Injection.InjectTo(monoBehaviour.GetType(), monoBehaviour);
             }
         }
 

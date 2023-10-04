@@ -152,7 +152,7 @@ namespace WOW.DI
         public T InjectInstantiate<T>(T behaviour, Transform parent) where T : Behaviour
         {
             var instance = Instantiate(behaviour, parent);
-            Injection.InjectToFields(typeof(T), instance);
+            Injection.InjectTo(typeof(T), instance);
             return instance;
         }
 
@@ -257,7 +257,10 @@ namespace WOW.DI
             {
                 throw new ProviderException($"Provider is already installed.");
             }
+        }
 
+        protected void Start()
+        {
             if (!isInstalled)
             {
                 Install();

@@ -82,7 +82,7 @@ public class WeatherForecast : MonoBehaviour
 }
 ```
 
-Attach the `InjectAttribute` to fields, it will be automatically injected on `Awake()`.
+Attach the `InjectAttribute` to fields, it will be automatically injected on `RuntimeInitializeOnLoadType.AfterSceneLoad`.
 
 ```c#
 public class WeatherForecast : MonoBehaviour
@@ -96,6 +96,31 @@ public class WeatherForecast : MonoBehaviour
         var response = await weatherService.GetWeatherAsync("0000");
     }
 }
+```
+
+Attach the `InjectAttribute` to methods, it will br automatically invoked on `RuntimeInitializeOnLoadType.AfterSceneLoad`
+
+```c#
+public class WeatherForecast : MonoBehaviour
+{
+    [Inject]
+    private void Init()
+    {
+        // Initialize On Injection.
+    }
+
+    [Inject]
+    private void Construct(IWeatherService service)
+    {
+        // Inject into the arguments
+    }
+}
+```
+
+Execution Order :
+
+```
+MonoBahaviour.Awake(), OnEnable() -> RuntimeInitializeOnLoad.AfterSceneLoaded() -> Inject to fields -> Inject to methods -> MonoBahaviour.Start() -> ... 
 ```
 
 When dynamically instantiate Prefabs, it will be automatically injected by using `InjectInstantiate`.

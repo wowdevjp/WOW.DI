@@ -11,7 +11,7 @@ namespace WOW.DI
         {
             var scopes = behaviour.GetComponentsInParent<Provider>();
 
-            if(scopes.Length < 1)
+            if (scopes.Length < 1)
             {
                 Debug.Assert(ProviderApp.Provider != null);
                 return new[] { ProviderApp.Provider };

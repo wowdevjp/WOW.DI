@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace WOW.DI
 {
-    [AttributeUsage(AttributeTargets.Field)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Method)]
     public class InjectAttribute : Attribute
     {
         public object Key { get; private set; } = null;

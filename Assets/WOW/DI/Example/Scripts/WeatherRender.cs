@@ -12,7 +12,18 @@ namespace WOW.DI.Example
         [SerializeField]
         private WeatherRenderPrefab prefab = null;
 
-        private async void Awake()
+        [Inject]
+        private void Init()
+        {
+            Debug.Log("WeatherRender :: Init");
+        }
+
+        private void Awake()
+        {
+            Debug.Log("WeatherRender :: Awake");
+        }
+
+        private async void Start()
         {
             var result = await weatherService.GetWeatherAsync("130000");
             Debug.Log(result);
