@@ -1,7 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using WOW.DI.Utility;
+using System.Linq;
 
 namespace WOW.DI
 {
@@ -11,14 +13,17 @@ namespace WOW.DI
         {
             var scopes = behaviour.GetComponentsInParent<Provider>();
 
+            var rootObjects = SceneUtilityDI.GetRootGameObjects();
+            var rootScopes = rootObjects.SelectMany(r => r.GetComponents<Provider>()).Distinct().ToArray();
+
+            scopes = scopes.Concat(rootScopes).Concat(new[] { ProviderApp.Provider }).ToArray();
+
             if (scopes.Length < 1)
             {
                 Debug.Assert(ProviderApp.Provider != null);
                 return new[] { ProviderApp.Provider };
             }
 
-            Array.Resize(ref scopes, scopes.Length + 1);
-            scopes[scopes.Length - 1] = ProviderApp.Provider;
             return scopes;
         }
 
@@ -53,7 +58,7 @@ namespace WOW.DI
                 }
             }
 
-            throw new ProviderException("Provider not found.");
+            throw new ProviderException($"Provider not found. {type.Name}");
         }
 
         public static object Inject(this Behaviour behaviour, System.Type type, object key)
@@ -76,7 +81,7 @@ namespace WOW.DI
                 }
             }
 
-            throw new ProviderException("Provider not found.");
+            throw new ProviderException($"Provider not found. {type.Name}");
         }
 
         public static T Inject<T>(this Behaviour behaviour) where T : class
@@ -99,7 +104,7 @@ namespace WOW.DI
                 }
             }
 
-            throw new ProviderException("Provider not found.");
+            throw new ProviderException($"Provider not found. {typeof(T).Name}");
         }
 
         public static T Inject<T>(this Behaviour behaviour, object key) where T : class
@@ -122,7 +127,7 @@ namespace WOW.DI
                 }
             }
 
-            throw new ProviderException("Provider not found.");
+            throw new ProviderException($"Provider not found. {typeof(T).Name}");
         }
 
         public static T InjectInstantiate<T>(this Behaviour behaviour, T prefab) where T : Behaviour
@@ -143,7 +148,7 @@ namespace WOW.DI
                     continue;
                 }
             }
-            throw new ProviderException("Provider not found.");
+            throw new ProviderException($"Provider not found. {typeof(T).Name}");
         }
 
         public static T InjectInstantiate<T>(this Behaviour behaviour, T prefab, Transform parent) where T : Behaviour
@@ -164,7 +169,7 @@ namespace WOW.DI
                     continue;
                 }
             }
-            throw new ProviderException("Provider not found.");
+            throw new ProviderException($"Provider not found. {typeof(T).Name}");
         }
     }
 }

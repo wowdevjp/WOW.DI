@@ -13,17 +13,7 @@ namespace WOW.DI.Example
         private WeatherRenderPrefab prefab = null;
 
         [Inject]
-        private void Init()
-        {
-            Debug.Log("WeatherRender :: Init");
-        }
-
-        private void Awake()
-        {
-            Debug.Log("WeatherRender :: Awake");
-        }
-
-        private async void Start()
+        private async void Init()
         {
             var result = await weatherService.GetWeatherAsync("130000");
             Debug.Log(result);

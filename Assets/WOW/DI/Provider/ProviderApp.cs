@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using WOW.DI.Utility;
 
 namespace WOW.DI
 {
@@ -76,7 +78,7 @@ namespace WOW.DI
         {
             this.Install();
 
-            var providers = GameObject.FindObjectsByType<Provider>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var providers = SceneUtilityDI.FindAllSceneObjectsByType<Provider>();
             foreach (var provider in providers)
             {
                 if (provider == this)
@@ -86,7 +88,7 @@ namespace WOW.DI
                 provider.Install();
             }
 
-            var monoBehaviours = GameObject.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var monoBehaviours = SceneUtilityDI.FindAllSceneObjectsByType<MonoBehaviour>();
 
             foreach (var monoBehaviour in monoBehaviours)
             {
@@ -95,7 +97,10 @@ namespace WOW.DI
                     continue;
                 }
 
-                Injection.InjectTo(monoBehaviour.GetType(), monoBehaviour);
+                if(monoBehaviour != null)
+                {
+                    Injection.InjectTo(monoBehaviour.GetType(), monoBehaviour);
+                }
             }
         }
 
@@ -104,7 +109,7 @@ namespace WOW.DI
             // :)
         }
 
-        private void Start()
+        private new void Start()
         {
             
         }

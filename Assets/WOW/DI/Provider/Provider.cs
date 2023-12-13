@@ -30,6 +30,11 @@ namespace WOW.DI
                 return this.provider.AddSingle<InterfaceT, T>(args);
             }
 
+            public T AsSingle<T>(T instance) where T : class
+            {
+                return this.provider.AddSingle<InterfaceT, T>(instance);
+            }
+
             public T WithKey<T>(object key) where T : class
             {
                 return this.provider.AddWithKey<T>(key);
@@ -38,6 +43,11 @@ namespace WOW.DI
             public T WithKey<T>(object key, params object[] args) where T : class
             {
                 return this.provider.AddWithKey<T>(key, args);
+            }
+
+            public T WithKey<T>(object key, T instance) where T : class
+            {
+                return this.provider.AddWithKey<T>(key, instance);
             }
         }
 
@@ -195,6 +205,17 @@ namespace WOW.DI
             return instance as InstanceT;
         }
 
+        private InstanceT AddSingle<InterfaceT, InstanceT>(InstanceT instance) where InterfaceT : class where InstanceT : class
+        {
+            ThrowExceptionIsNotImplemented<InterfaceT, InstanceT>();
+            if (singleInstances.ContainsKey(typeof(InterfaceT)))
+            {
+                throw new ProviderException($"{nameof(InterfaceT)} already exists.");
+            }
+            singleInstances[typeof(InterfaceT)] = instance;
+            return instance;
+        }
+
         private T AddWithKey<T>(object key, params object[] args) where T : class
         {
             if(keyAssignedInstances.ContainsKey(key))
@@ -217,6 +238,16 @@ namespace WOW.DI
             var instance = System.Activator.CreateInstance(typeof(T));
             keyAssignedInstances.Add(key, instance);
             return instance as T;
+        }
+
+        private T AddWithKey<T>(object key, T instance) where T : class
+        {
+            if (keyAssignedInstances.ContainsKey(key))
+            {
+                throw new ProviderException($"Key: {key} already exists.");
+            }
+            keyAssignedInstances.Add(key, instance);
+            return instance;
         }
 
         protected void DisposeKeyAssignedInstances()
